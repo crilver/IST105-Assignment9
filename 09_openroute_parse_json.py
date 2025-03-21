@@ -24,7 +24,13 @@ def geocode_address(address):
     else:
         print(f"Error: {response.status_code} - {response.text}")
         return None
-    
+
+def parse_seconds(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    secs = seconds  % 60 
+    return [hours, minutes, secs]
+
 while True:
     orig = input("Starting Location: ")
     if orig == "quit" or orig == "q":
@@ -68,8 +74,9 @@ while True:
                 duration = segment.get('duration', 'N/A')
                 distance = segment.get('distance', 'N/A')
 
-                print(f"Trip Duration: {duration} seconds")
-                print(f"Distance: {distance} meters")
+                [hours, mins, secs] = parse_seconds(duration)
+                print(f"Trip Duration: {hours:.0f} hours {mins:.0f} minutes {secs:.0f} seconds")
+                print(f"Distance: {distance/1000:.2f} kilometers")
                 print("=============================================")
 
                 # Extract and print step-by-step directions
